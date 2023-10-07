@@ -12,7 +12,7 @@ class ItemTest {
 
         Item item = new Item(1, new Produto(1, BigDecimal.valueOf(1.99)), BigDecimal.valueOf(3.523));
 
-        Assertions.assertEquals(item.getPrecoTotal(), BigDecimal.valueOf(7.01));
+        Assertions.assertEquals(BigDecimal.valueOf(7.01), item.getPrecoTotal());
 
     }
 
