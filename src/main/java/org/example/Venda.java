@@ -3,81 +3,102 @@ package org.example;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Venda {
 
-    private List<Item> itens = new ArrayList<>();
+    private final List<Item> itens = new ArrayList<>();
 
-    private List<Recebimento> recebimentos = new ArrayList<>();
+    private final List<Recebimento> recebimentos = new ArrayList<>();
 
     public Integer getProximoSequencialItem() {
 
-        Integer max = 0;
-
-        for (Item item : itens) {
-            if (item.getSequencial() > max) {
-                max = item.getSequencial();
-            }
-        }
-
-        return max + 1;
+        return itens.stream()
+                .map(Item::getSequencial)
+                .max(Integer::compareTo)
+                .orElse(0) + 1;
 
     }
 
     public void adicionarItem(Item item) {
+
         itens.add(item);
+
     }
 
     public void removerItem(Integer sequencial) {
-        for (Item item : itens) {
+
+        Iterator<Item> iterator = itens.iterator();
+
+        while (iterator.hasNext()) {
+
+            Item item = iterator.next();
+
             if (item.getSequencial().equals(sequencial)) {
-                itens.remove(item);
+
+                iterator.remove();
                 break;
+
             }
+
         }
+
     }
 
     public BigDecimal getTroco() {
+
         return getTotal().subtract(getPagamentoTotal()).multiply(BigDecimal.valueOf(-1)).setScale(2, RoundingMode.HALF_UP);
+
     }
 
     public void adicionarRecebimento(Recebimento recebimento) {
+
         recebimentos.add(recebimento);
+
     }
 
     public void removerRecebimento(Integer sequencial) {
-        for (Recebimento recebimento : recebimentos) {
+
+        Iterator<Recebimento> iterator = recebimentos.iterator();
+
+        while (iterator.hasNext()) {
+
+            Recebimento recebimento = iterator.next();
+
             if (recebimento.getSequencial().equals(sequencial)) {
-                recebimentos.remove(recebimento);
+
+                iterator.remove();
                 break;
+
             }
+
         }
+
     }
 
     public BigDecimal getTotal() {
-        BigDecimal total = new BigDecimal(0.00);
 
-        for (Item item : itens) {
-            total = total.add(item.getPrecoTotal());
-        }
+        return itens.stream()
+                .map(Item::getPrecoTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(2, RoundingMode.HALF_UP);
 
-        return total.setScale(2, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getPagamentoPendente() {
+
         return getTotal().subtract(getPagamentoTotal()).setScale(2, RoundingMode.HALF_UP);
+
     }
 
     public BigDecimal getPagamentoTotal() {
 
-        BigDecimal total = new BigDecimal(0.00);
+        return recebimentos.stream()
+                .map(Recebimento::getPagamento)
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(2, RoundingMode.HALF_UP);
 
-        for (Recebimento recebimento : recebimentos) {
-            total = total.add(recebimento.getPagamento());
-        }
-
-        return total.setScale(2, RoundingMode.HALF_UP);
     }
 
 }
