@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 class VendaTest {
 
@@ -37,7 +38,7 @@ class VendaTest {
         venda.adicionarItem(new Item(1, new Produto(1, BigDecimal.valueOf(2.00)), BigDecimal.valueOf(1.00)));
 
         Assertions.assertEquals(2, venda.getProximoSequencialItem());
-        Assertions.assertEquals(BigDecimal.valueOf(2.00), venda.getTotal());
+        Assertions.assertEquals(BigDecimal.valueOf(2.00).setScale(2, RoundingMode.HALF_UP), venda.getTotal());
 
     }
 
@@ -51,12 +52,12 @@ class VendaTest {
         venda.removerItem(2);
 
         Assertions.assertEquals(2, venda.getProximoSequencialItem());
-        Assertions.assertEquals(BigDecimal.valueOf(2.00), venda.getTotal());
+        Assertions.assertEquals(BigDecimal.valueOf(2.00).setScale(2, RoundingMode.HALF_UP), venda.getTotal());
 
         venda.removerItem(1);
 
         Assertions.assertEquals(1, venda.getProximoSequencialItem());
-        Assertions.assertEquals(BigDecimal.valueOf(0.00), venda.getTotal());
+        Assertions.assertEquals(BigDecimal.valueOf(0.00).setScale(2, RoundingMode.HALF_UP), venda.getTotal());
 
     }
 
@@ -66,10 +67,10 @@ class VendaTest {
         Venda venda = new Venda();
 
         venda.adicionarRecebimento(new Recebimento(1, BigDecimal.valueOf(3.00)));
-        Assertions.assertEquals(BigDecimal.valueOf(3.00), venda.getPagamentoTotal());
+        Assertions.assertEquals(BigDecimal.valueOf(3.00).setScale(2, RoundingMode.HALF_UP), venda.getPagamentoTotal());
 
         venda.adicionarRecebimento(new Recebimento(1, BigDecimal.valueOf(1.55)));
-        Assertions.assertEquals(BigDecimal.valueOf(4.55), venda.getPagamentoTotal());
+        Assertions.assertEquals(BigDecimal.valueOf(4.55).setScale(2, RoundingMode.HALF_UP), venda.getPagamentoTotal());
 
     }
 
@@ -78,13 +79,13 @@ class VendaTest {
 
         Venda venda = new Venda();
         venda.adicionarRecebimento(new Recebimento(1, BigDecimal.valueOf(3.00)));
-        venda.adicionarRecebimento(new Recebimento(1, BigDecimal.valueOf(1.55)));
+        venda.adicionarRecebimento(new Recebimento(2, BigDecimal.valueOf(1.55)));
 
         venda.removerRecebimento(1);
-        Assertions.assertEquals(BigDecimal.valueOf(1.55), venda.getPagamentoTotal());
+        Assertions.assertEquals(BigDecimal.valueOf(1.55).setScale(2, RoundingMode.HALF_UP), venda.getPagamentoTotal());
 
         venda.removerRecebimento(2);
-        Assertions.assertEquals(BigDecimal.valueOf(0.00), venda.getPagamentoTotal());
+        Assertions.assertEquals(BigDecimal.valueOf(0.00).setScale(2, RoundingMode.HALF_UP), venda.getPagamentoTotal());
 
     }
 
@@ -95,7 +96,7 @@ class VendaTest {
         venda.adicionarItem(new Item(1, new Produto(1, BigDecimal.valueOf(2.00)), BigDecimal.valueOf(1.00)));
         venda.adicionarRecebimento(new Recebimento(1, BigDecimal.valueOf(3.00)));
 
-        Assertions.assertEquals(BigDecimal.valueOf(1.00), venda.getTroco());
+        Assertions.assertEquals(BigDecimal.valueOf(1.00).setScale(2, RoundingMode.HALF_UP), venda.getTroco());
 
     }
 
@@ -105,7 +106,7 @@ class VendaTest {
         Venda venda = new Venda();
         venda.adicionarItem(new Item(1, new Produto(1, BigDecimal.valueOf(2.23)), BigDecimal.valueOf(1.234)));
 
-        Assertions.assertEquals(BigDecimal.valueOf(2.75), venda.getTotal());
+        Assertions.assertEquals(BigDecimal.valueOf(2.75).setScale(2, RoundingMode.HALF_UP), venda.getTotal());
 
     }
 
@@ -115,10 +116,10 @@ class VendaTest {
         Venda venda = new Venda();
         venda.adicionarItem(new Item(1, new Produto(1, BigDecimal.valueOf(2.00)), BigDecimal.valueOf(1.00)));
 
-        Assertions.assertEquals(BigDecimal.valueOf(2.00), venda.getPagamentoPendente());
+        Assertions.assertEquals(BigDecimal.valueOf(2.00).setScale(2, RoundingMode.HALF_UP), venda.getPagamentoPendente());
 
         venda.adicionarRecebimento(new Recebimento(1, BigDecimal.valueOf(1.00)));
-        Assertions.assertEquals(BigDecimal.valueOf(1.00), venda.getPagamentoPendente());
+        Assertions.assertEquals(BigDecimal.valueOf(1.00).setScale(2, RoundingMode.HALF_UP), venda.getPagamentoPendente());
 
     }
 
@@ -129,7 +130,7 @@ class VendaTest {
         venda.adicionarRecebimento(new Recebimento(1, BigDecimal.valueOf(3.00)));
         venda.adicionarRecebimento(new Recebimento(1, BigDecimal.valueOf(1.55)));
 
-        Assertions.assertEquals(BigDecimal.valueOf(4.55), venda.getPagamentoTotal());
+        Assertions.assertEquals(BigDecimal.valueOf(4.55).setScale(2, RoundingMode.HALF_UP), venda.getPagamentoTotal());
 
     }
 
