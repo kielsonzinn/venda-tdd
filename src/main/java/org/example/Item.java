@@ -1,6 +1,8 @@
 package org.example;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 
 public class Item {
 
@@ -29,8 +31,7 @@ public class Item {
     }
 
     public BigDecimal getPrecoTotal() {
-        //TODO IMPLEMENTAR
-        return BigDecimal.valueOf(0.00);
+        return getQuantidade().multiply(getProduto().getPreco()).setScale(2, RoundingMode.HALF_UP);
     }
 
 }
